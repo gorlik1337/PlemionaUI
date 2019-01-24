@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [STABLE] Plemiona UI by Gorlik Stable
-// @version      0.6
+// @version      0.6b
 // @description  Dodatkowe informacje w grze plemiona.pl
 // @author       Gorlik
 // @match        https://*.plemiona.pl/game.php?*
@@ -310,4 +310,5 @@ window.onload = function() {
 	    }
     }
 }
+} // Koniec głowny ekran wioski
 })();
