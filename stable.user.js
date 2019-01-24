@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Plemiona UI by Gorlik Stable
-// @version      0.5
+// @name         [STABLE] Plemiona UI by Gorlik Stable
+// @version      0.6
 // @description  Dodatkowe informacje w grze plemiona.pl
 // @author       Gorlik
 // @match        https://*.plemiona.pl/game.php?*
