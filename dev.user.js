@@ -1,11 +1,12 @@
 // ==UserScript==
-// @name         Plemiona UI by Gorlik
-// @version      1.0
+// @name         [DEV] Plemiona UI by Gorlik
+// @version      6.66
 // @description  Dodatkowe informacje na głównym ekranie wioski w grze plemiona.pl
 // @author       Gorlik
 // @match        https://*.plemiona.pl/game.php?*
 // @grant        none
-
+// @updateURL   https://github.com/gorlik1337/PlemionaUI/raw/master/dev.user.js
+// @downloadURL https://github.com/gorlik1337/PlemionaUI/raw/master/dev.user.js
 // ==/UserScript==
 
 
