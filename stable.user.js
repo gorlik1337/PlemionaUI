@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [STABLE] Plemiona UI by Gorlik Stable
-// @version      0.7
+// @version      0.7b
 // @description  Dodatkowe informacje w grze plemiona.pl
 // @author       Gorlik
 // @match        https://*.plemiona.pl/game.php?*
@@ -8,7 +8,6 @@
 // @updateURL    https://github.com/gorlik1337/PlemionaUI/raw/master/stable.user.js
 // @downloadURL  https://github.com/gorlik1337/PlemionaUI/raw/master/stable.user.js
 // ==/UserScript==
-
 
 (function() {
     if (localStorage['GorlikUI'] == undefined){
@@ -65,10 +64,10 @@
         let td = document.createElement("td");
             let img = document.createElement("img");
                 img.setAttribute("src", iconurl);
-                img.setAttribute("style", "vertical-align: middle");
+                img.setAttribute("style", "vertical-align: middle;");
             let link = document.createElement('a');
             link.setAttribute("onclick", "$.getScript('"+url+"');");
-            link.setAttribute("href", "");
+            link.setAttribute("style", "cursor: pointer;");
             link.innerText = " "+text;
             td.appendChild(img);
             td.appendChild(link);
@@ -107,7 +106,13 @@ if (document.URL.includes('screen=overview')){
 
     // link to map
     const worldcode = document.URL.split('/')[2].split('.')[0];
-    const cordinate = document.getElementById('menu_row2').children[1].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    if (document.getElementById('mobileMenu') != null){
+        var cordinate = document.getElementById('mobileMenu').children[0].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    }
+    if (document.getElementById('menu_row2') != null){
+        var cordinate = document.getElementById('menu_row2').children[1].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    }
+
     const maplink = 'http://'+worldcode+'.plemionamapa.pl/?x='+cordinate[0]+'&y='+cordinate[1];
     const planerlink = 'http://pl.twstats.com/'+worldcode+'/index.php?page=attack_planner';
 
