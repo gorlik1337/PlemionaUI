@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [STABLE] Plemiona UI by Gorlik Stable
-// @version      0.7b
+// @version      0.7c
 // @description  Dodatkowe informacje w grze plemiona.pl
 // @author       Gorlik
 // @match        https://*.plemiona.pl/game.php?*
@@ -14,6 +14,11 @@
         localStorage['GorlikUI'] = JSON.stringify({"showSupport": true, "showSettings": true, "enableScaling": false, "autoRaportDelete": false});
     }
     DATABASE = JSON.parse(localStorage['GorlikUI']);
+
+    // URLGET
+    let x = window.location.search.replace('?', '').split('&'); 
+    URLGET = {};
+    for (let i = 0; i < x.length; i++) {URLGET[x[i].split('=')[0]] = x[i].split('=')[1];}    
 
 
     function createHelper(){
@@ -90,7 +95,8 @@
 
 
 /*głowny ekran wioski*/
-if (document.URL.includes('screen=overview')){
+//if (document.URL.includes('screen=overview')){
+if (URLGET['screen'] == 'overview'){
     /*storage speed*/
     const sury_speed_tab = document.getElementById('show_prod').getElementsByTagName('table')[0];
     const sury_speed_drewno = parseInt(sury_speed_tab.children[0].children[0].children[1].children[0].innerText.replace('.', ''));
@@ -106,9 +112,12 @@ if (document.URL.includes('screen=overview')){
 
     // link to map
     const worldcode = document.URL.split('/')[2].split('.')[0];
-    if (document.getElementById('mobileMenu') != null){
-        var cordinate = document.getElementById('mobileMenu').children[0].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    if (document.getElementById('mobileMenuScroll') != null){
+        var cordinate = document.getElementById('mobileMenuScroll').getElementsByTagName('a')[0].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
     }
+    /*if (document.getElementById('mobileMenuSmall') != null){
+        var cordinate = document.getElementById('mobileMenuSmall').children[0].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    }*/
     if (document.getElementById('menu_row2') != null){
         var cordinate = document.getElementById('menu_row2').children[1].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
     }
@@ -144,7 +153,9 @@ setInterval(function() {
         parent.appendChild(obj);
     }
     document.getElementById('pop_left_label').innerHTML = `(${popfree})`;
-    document.getElementById('WolnaPopulacja_plemionaui').getElementsByTagName('strong')[0].innerHTML = ` ${popfree} `;      
+    if (URLGET['screen'] == 'overview'){
+        document.getElementById('WolnaPopulacja_plemionaui').getElementsByTagName('strong')[0].innerHTML = ` ${popfree} `; 
+    }     
 }, 1000);
 
 })();
