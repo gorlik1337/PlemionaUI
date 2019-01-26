@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [STABLE] Plemiona UI by Gorlik Stable
-// @version      0.7c
+// @version      0.8
 // @description  Dodatkowe informacje w grze plemiona.pl
 // @author       Gorlik
 // @match        https://*.plemiona.pl/game.php?*
@@ -121,11 +121,8 @@ if (URLGET['screen'] == 'overview'){
     if (document.getElementById('menu_row2') != null){
         var cordinate = document.getElementById('menu_row2').children[1].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
     }
-
     const maplink = 'http://'+worldcode+'.plemionamapa.pl/?x='+cordinate[0]+'&y='+cordinate[1];
     const planerlink = 'http://pl.twstats.com/'+worldcode+'/index.php?page=attack_planner';
-
-
 
     createHelper();
     addHelperLine('0', 'Wolna Populacja', 'https://help.plemiona.pl/images/1/1c/Ludz.png');
@@ -136,7 +133,39 @@ if (URLGET['screen'] == 'overview'){
     addHelperLineURL("plemionamapa.pl", maplink, "https://dspl.innogamescdn.com/asset/76fbc2898/graphic/icons/map2.png");
     addHelperLineURL("Planer Ataków", planerlink, "https://help.plemiona.pl/images/e/ea/Predkosc.png");
     addHelperScript("Stan Wojska", "https://media.innogamescdn.com/com_DS_PL/skrypty/licznik_wojska.js", "https://help.plemiona.pl/images/2/21/Koszary_16x16.png");
+}
 
+/* Raporty */
+if (URLGET['screen'] == 'report'){
+    if (document.getElementById('mobileNavContentRight') != null){
+        let delraportlink = document.getElementById('mobileNavContentRight').children[0].children[0].cloneNode(true);
+        delraportlink.children[0].innerText = "Usuń Barby";
+        delraportlink.children[0].style = "color: #ff00eb;";
+        delraportlink.children[0].href = window.location.href+"&deletebarb=true";
+        document.getElementById('mobileNavContentRight').children[0].appendChild(delraportlink);
+    }
+    if (document.getElementsByClassName('modemenu')[0] != null){
+        let delraportlink = document.getElementsByClassName('modemenu')[0].children[0].children[0].cloneNode(true)
+        delraportlink.children[0].children[0].innerText = "Usuń Barby ";
+        delraportlink.children[0].className=""
+        delraportlink.children[0].children[0].style = "color: #ff00eb;";
+        delraportlink.children[0].children[0].href = window.location.href+"&deletebarb=true";
+        document.getElementsByClassName('modemenu')[0].children[0].appendChild(delraportlink);  
+    }
+
+    if (URLGET['deletebarb'] == 'true'){
+        setInterval(function() {
+            let barby = ['Wioska barbarzyńska', 'Osada koczowników'];
+            for (let i = 1; i < document.getElementById('report_list').children[0].childElementCount-1; i++) {
+                for(let x = 0; x < barby.length; x++){
+                    if (document.getElementById('report_list').children[0].children[i].innerText.includes(barby[x])){
+                        document.getElementById('report_list').children[0].children[i].children[0].children[0].checked = true;
+                    }
+                }
+            }
+            document.getElementsByName('del')[0].click();
+        }, 3000);
+    }
 }
 
 // Refresh Data Everywhere
