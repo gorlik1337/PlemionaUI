@@ -17,6 +17,11 @@
     }
     DATABASE = JSON.parse(localStorage['GorlikUI']);
 
+    // URLGET
+    let x = window.location.search.replace('?', '').split('&'); 
+    URLGET = {};
+    for (let i = 0; i < x.length; i++) {URLGET[x[i].split('=')[0]] = x[i].split('=')[1];}    
+
 
     function createHelper(){
         let obj = document.getElementById('show_prod').cloneNode(true);
@@ -66,10 +71,10 @@
         let td = document.createElement("td");
             let img = document.createElement("img");
                 img.setAttribute("src", iconurl);
-                img.setAttribute("style", "vertical-align: middle");
+                img.setAttribute("style", "vertical-align: middle;");
             let link = document.createElement('a');
             link.setAttribute("onclick", "$.getScript('"+url+"');");
-            link.setAttribute("href", "");
+            link.setAttribute("style", "cursor: pointer;");
             link.innerText = " "+text;
             td.appendChild(img);
             td.appendChild(link);
@@ -92,7 +97,8 @@
 
 
 /*głowny ekran wioski*/
-if (document.URL.includes('screen=overview')){
+//if (document.URL.includes('screen=overview')){
+if (URLGET['screen'] == 'overview'){
     /*storage speed*/
     const sury_speed_tab = document.getElementById('show_prod').getElementsByTagName('table')[0];
     const sury_speed_drewno = parseInt(sury_speed_tab.children[0].children[0].children[1].children[0].innerText.replace('.', ''));
@@ -108,7 +114,16 @@ if (document.URL.includes('screen=overview')){
 
     // link to map
     const worldcode = document.URL.split('/')[2].split('.')[0];
-    const cordinate = document.getElementById('menu_row2').children[1].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    if (document.getElementById('mobileMenu') != null){
+        var cordinate = document.getElementById('mobileMenuScroll').getElementsByTagName('a')[0].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    }
+    if (document.getElementById('mobileMenuSmall') != null){
+        var cordinate = document.getElementById('mobileMenuSmall').children[0].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    }
+    if (document.getElementById('menu_row2') != null){
+        var cordinate = document.getElementById('menu_row2').children[1].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+    }
+
     const maplink = 'http://'+worldcode+'.plemionamapa.pl/?x='+cordinate[0]+'&y='+cordinate[1];
     const planerlink = 'http://pl.twstats.com/'+worldcode+'/index.php?page=attack_planner';
 
@@ -140,7 +155,9 @@ setInterval(function() {
         parent.appendChild(obj);
     }
     document.getElementById('pop_left_label').innerHTML = `(${popfree})`;
-    document.getElementById('WolnaPopulacja_plemionaui').getElementsByTagName('strong')[0].innerHTML = ` ${popfree} `;      
+    if (URLGET['screen'] == 'overview'){
+        document.getElementById('WolnaPopulacja_plemionaui').getElementsByTagName('strong')[0].innerHTML = ` ${popfree} `; 
+    }     
 }, 1000);
 
 })();
