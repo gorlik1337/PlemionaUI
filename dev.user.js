@@ -81,8 +81,8 @@
         tr.appendChild(td);
     document.getElementById('show_plemionaui_helper').getElementsByTagName('tbody')[0].appendChild(tr);
     }
+    function doublezero(x){if (x<10){return "0"+x;}else{return ""+x;}}
     function betterDisplayTime(time){
-        function doublezero(x){if (x<10){return "0"+x;}else{return ""+x;}}
         let h = Math.floor(time);
         let m = Math.round((time - h) * 60);
         return h+":"+doublezero(m);
@@ -155,19 +155,82 @@ if (URLGET['screen'] == 'report'){
         document.getElementsByClassName('modemenu')[0].children[0].appendChild(delraportlink);  
     }
 
-    if (URLGET['deletebarb'] == 'true'){
+    if (URLGET['deletebarb'] == 'true' || DATABASE['autoRaportDelete'] == true){
+        DATABASE['autoRaportDelete'] = true;
+        localStorage['GorlikUI'] = JSON.stringify(window['DATABASE']);
         setInterval(function() {
             let barby = ['Wioska barbarzyńska', 'Osada koczowników'];
+            let deletesomething = false;
             for (let i = 1; i < document.getElementById('report_list').children[0].childElementCount-1; i++) {
                 for(let x = 0; x < barby.length; x++){
                     if (document.getElementById('report_list').children[0].children[i].innerText.includes(barby[x])){
                         document.getElementById('report_list').children[0].children[i].children[0].children[0].checked = true;
+                        deletesomething = true;
                     }
                 }
             }
-            document.getElementsByName('del')[0].click();
-        }, 3000);
+            if (deletesomething == false){
+                console.log('juz nie usuwaj');
+                DATABASE['autoRaportDelete'] = false;
+                localStorage['GorlikUI'] = JSON.stringify(window['DATABASE']);
+                location.href=location.href;
+            }else{
+                document.getElementsByName('del')[0].click();
+            }
+        }, 2000);
     }
+}
+
+if (URLGET['screen'] == 'map'){
+    setInterval(function() {
+        if (document.getElementById('troop_confirm_go') != null){
+            if (document.getElementById('plemionaui_planingatack') == null){
+                let form = document.getElementById('command-data-form');
+                let span = document.createElement("span");
+                span.innerText = "Zaplanuj Automatyczny Atak";
+                span.setAttribute("style","font-weight: 700;");
+                form.appendChild(span);
+
+                let checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = "plemionaui_planingatack";
+                form.appendChild(checkbox);
+
+                let input = document.createElement("input");
+                input.type='time';
+                input.setAttribute("step", "1");
+                input.id = "plemionaui_planingatacktime";
+                input.setAttribute("style","font-weight: 700; font-size: 15px;");
+
+                let timenow = new Date;
+                timenow.setMinutes( timenow.getMinutes() + 5 );
+                input.value = ""+doublezero(timenow.getHours())+":"+doublezero(timenow.getMinutes())+":"+doublezero(timenow.getSeconds());
+                form.appendChild(input);
+
+                let spanmsg = document.createElement("span");
+                spanmsg.innerText = "Off";
+                spanmsg.setAttribute("style","font-weight: 700; font-size: 15px;");
+                spanmsg.id = "plemionaui_planingatackmsg";
+                form.appendChild(spanmsg);
+            }
+        }
+        if (document.getElementById('troop_confirm_go') != null){
+            if (document.getElementById('plemionaui_planingatack').checked){
+                let atacktime = document.getElementById('plemionaui_planingatacktime').value.split(":");
+                let timenowtxt = new Date;
+                timenowtxt = ""+doublezero(timenowtxt.getHours())+":"+doublezero(timenowtxt.getMinutes())+":"+doublezero(timenowtxt.getSeconds());
+                timenow = timenowtxt.split(":");
+                if (parseInt(atacktime[0]) <= parseInt(timenow[0])){
+                    if (parseInt(atacktime[1]) <= parseInt(timenow[1])){
+                        if (parseInt(atacktime[2]) <= parseInt(timenow[2])){
+                            document.getElementById('troop_confirm_go').click()
+                        }
+                    }
+                }
+                document.getElementById('plemionaui_planingatackmsg').innerText = " Zegar: "+timenowtxt+"";
+            }
+        }
+    }, 1000);
 }
 
 // Refresh Data Everywhere
