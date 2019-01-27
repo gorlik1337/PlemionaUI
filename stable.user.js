@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [STABLE] Plemiona UI by Gorlik Stable
-// @version      0.8
+// @version      0.9
 // @description  Dodatkowe informacje w grze plemiona.pl
 // @author       Gorlik
 // @match        https://*.plemiona.pl/game.php?*
@@ -9,7 +9,8 @@
 // @downloadURL  https://github.com/gorlik1337/PlemionaUI/raw/master/stable.user.js
 // ==/UserScript==
 
-(function() {
+
+function core() {
     if (localStorage['GorlikUI'] == undefined){
         localStorage['GorlikUI'] = JSON.stringify({"showSupport": true, "showSettings": true, "enableScaling": false, "autoRaportDelete": false});
     }
@@ -79,8 +80,8 @@
         tr.appendChild(td);
     document.getElementById('show_plemionaui_helper').getElementsByTagName('tbody')[0].appendChild(tr);
     }
+    function doublezero(x){if (x<10){return "0"+x;}else{return ""+x;}}
     function betterDisplayTime(time){
-        function doublezero(x){if (x<10){return "0"+x;}else{return ""+x;}}
         let h = Math.floor(time);
         let m = Math.round((time - h) * 60);
         return h+":"+doublezero(m);
@@ -153,22 +154,137 @@ if (URLGET['screen'] == 'report'){
         document.getElementsByClassName('modemenu')[0].children[0].appendChild(delraportlink);  
     }
 
-    if (URLGET['deletebarb'] == 'true'){
+    if (URLGET['deletebarb'] == 'true' || DATABASE['autoRaportDelete'] == true){
+        DATABASE['autoRaportDelete'] = true;
+        localStorage['GorlikUI'] = JSON.stringify(window['DATABASE']);
         setInterval(function() {
             let barby = ['Wioska barbarzyńska', 'Osada koczowników'];
+            let deletesomething = false;
             for (let i = 1; i < document.getElementById('report_list').children[0].childElementCount-1; i++) {
                 for(let x = 0; x < barby.length; x++){
                     if (document.getElementById('report_list').children[0].children[i].innerText.includes(barby[x])){
                         document.getElementById('report_list').children[0].children[i].children[0].children[0].checked = true;
+                        deletesomething = true;
                     }
                 }
             }
-            document.getElementsByName('del')[0].click();
-        }, 3000);
+            if (deletesomething == false){
+                console.log('juz nie usuwaj');
+                DATABASE['autoRaportDelete'] = false;
+                localStorage['GorlikUI'] = JSON.stringify(window['DATABASE']);
+                location.href=location.href;
+            }else{
+                document.getElementsByName('del')[0].click();
+            }
+        }, 2000);
     }
 }
 
-// Refresh Data Everywhere
+// AutoAtack
+if (URLGET['screen'] == 'map'){
+    setInterval(function() {
+        if (document.getElementById('troop_confirm_go') != null){
+            if (document.getElementById('plemionaui_planingatack') == null){
+                let form = document.getElementById('command-data-form');
+                let span = document.createElement("span");
+                span.innerText = "Zaplanuj Automatyczny Atak";
+                span.setAttribute("style","font-weight: 700;");
+                form.appendChild(span);
+
+                let checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = "plemionaui_planingatack";
+                form.appendChild(checkbox);
+
+                let input = document.createElement("input");
+                input.type='time';
+                input.setAttribute("step", "1");
+                input.id = "plemionaui_planingatacktime";
+                input.setAttribute("style","font-weight: 700; font-size: 15px;");
+
+                let timenow = new Date;
+                timenow.setMinutes( timenow.getMinutes() + 5 );
+                input.value = ""+doublezero(timenow.getHours())+":"+doublezero(timenow.getMinutes())+":"+doublezero(timenow.getSeconds());
+                form.appendChild(input);
+
+                let spanmsg = document.createElement("span");
+                spanmsg.innerText = "Off";
+                spanmsg.setAttribute("style","font-weight: 700; font-size: 15px;");
+                spanmsg.id = "plemionaui_planingatackmsg";
+                form.appendChild(spanmsg);
+            }
+        }
+        if (document.getElementById('troop_confirm_go') != null){
+            if (document.getElementById('plemionaui_planingatack').checked){
+                let atacktime = document.getElementById('plemionaui_planingatacktime').value.split(":");
+                let timenowtxt = new Date;
+                timenowtxt = ""+doublezero(timenowtxt.getHours())+":"+doublezero(timenowtxt.getMinutes())+":"+doublezero(timenowtxt.getSeconds());
+                timenow = timenowtxt.split(":");
+                if (parseInt(atacktime[0]) <= parseInt(timenow[0])){
+                    if (parseInt(atacktime[1]) <= parseInt(timenow[1])){
+                        if (parseInt(atacktime[2]) <= parseInt(timenow[2])){
+                            document.getElementById('troop_confirm_go').click()
+                        }
+                    }
+                }
+                document.getElementById('plemionaui_planingatackmsg').innerText = " Zegar: "+timenowtxt+"";
+            }
+        }
+    }, 1000);
+}
+// mobile AutoAtack
+if (URLGET['screen'] == 'place' && URLGET['try'] == 'confirm'){
+    let form = document.getElementsByTagName('form')[0];
+    let span = document.createElement("span");
+    span.innerText = "Zaplanuj Automatyczny Atak ";
+    span.id = "plemionaui_marker";
+    span.setAttribute("style","font-weight: 700;");
+    form.insertBefore(span, form.children[8]);
+
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "plemionaui_planingatack";
+    form.insertBefore(checkbox, form.children[9]);
+
+    let br = document.createElement("br");
+    form.insertBefore(br, form.children[10]);
+
+    let input = document.createElement("input");
+    input.type='time';
+    input.setAttribute("step", "1");
+    input.id = "plemionaui_planingatacktime";
+    input.setAttribute("style","font-weight: 700; font-size: 15px;");
+
+    let timenow = new Date;
+    timenow.setMinutes( timenow.getMinutes() + 5 );
+    input.value = ""+doublezero(timenow.getHours())+":"+doublezero(timenow.getMinutes())+":"+doublezero(timenow.getSeconds());
+    form.insertBefore(input, form.children[11]);
+
+    let spanmsg = document.createElement("span");
+    spanmsg.innerText = "Off";
+    spanmsg.setAttribute("style","font-weight: 700; font-size: 15px;");
+    spanmsg.id = "plemionaui_planingatackmsg";
+    form.insertBefore(spanmsg, form.children[12]);
+
+    setInterval(function() {
+        if (document.getElementById('plemionaui_planingatack').checked){
+            let atacktime = document.getElementById('plemionaui_planingatacktime').value.split(":");
+            let timenowtxt = new Date;
+            timenowtxt = ""+doublezero(timenowtxt.getHours())+":"+doublezero(timenowtxt.getMinutes())+":"+doublezero(timenowtxt.getSeconds());
+            timenow = timenowtxt.split(":");
+            if (parseInt(atacktime[0]) <= parseInt(timenow[0])){
+                if (parseInt(atacktime[1]) <= parseInt(timenow[1])){
+                    if (parseInt(atacktime[2]) <= parseInt(timenow[2])){
+                        form.getElementsByClassName('btn')[0].click()
+                    }
+                }
+            }
+            document.getElementById('plemionaui_planingatackmsg').innerText = " Zegar: "+timenowtxt+"";
+        }  
+    }, 1000);
+}
+
+// Refresh Pop Everywhere
 setInterval(function() {
     let pop = document.getElementById('pop_current_label').innerHTML;
     let popmax = document.getElementById('pop_max_label').innerHTML;
@@ -187,4 +303,7 @@ setInterval(function() {
     }     
 }, 1000);
 
-})();
+
+};// core()
+
+window.onload = core();
