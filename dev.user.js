@@ -11,7 +11,7 @@
 
 
 
-(function() {
+function core() {
     if (localStorage['GorlikUI'] == undefined){
         localStorage['GorlikUI'] = JSON.stringify({"showSupport": true, "showSettings": true, "enableScaling": false, "autoRaportDelete": false});
     }
@@ -276,6 +276,7 @@ if (URLGET['screen'] == 'place' && URLGET['try'] == 'confirm'){
             if (parseInt(atacktime[0]) <= parseInt(timenow[0])){
                 if (parseInt(atacktime[1]) <= parseInt(timenow[1])){
                     if (parseInt(atacktime[2]) <= parseInt(timenow[2])){
+                        console.log('Wyslij atak')
                         form.getElementsByClassName('btn')[0].click()
                     }
                 }
@@ -304,4 +305,6 @@ setInterval(function() {
     }     
 }, 1000);
 
-})();
+};
+
+window.onload = core();
