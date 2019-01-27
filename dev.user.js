@@ -181,6 +181,7 @@ if (URLGET['screen'] == 'report'){
     }
 }
 
+// AutoAtack
 if (URLGET['screen'] == 'map'){
     setInterval(function() {
         if (document.getElementById('troop_confirm_go') != null){
@@ -230,6 +231,57 @@ if (URLGET['screen'] == 'map'){
                 document.getElementById('plemionaui_planingatackmsg').innerText = " Zegar: "+timenowtxt+"";
             }
         }
+    }, 1000);
+}
+// mobile AutoAtack
+if (URLGET['screen'] == 'place' && URLGET['try'] == 'confirm'){
+    let form = document.getElementsByTagName('form')[0];
+    let span = document.createElement("span");
+    span.innerText = "Zaplanuj Automatyczny Atak ";
+    span.id = "plemionaui_marker";
+    span.setAttribute("style","font-weight: 700;");
+    form.insertBefore(span, form.children[8]);
+
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "plemionaui_planingatack";
+    form.insertBefore(checkbox, form.children[9]);
+
+    let br = document.createElement("br");
+    form.insertBefore(br, form.children[10]);
+
+    let input = document.createElement("input");
+    input.type='time';
+    input.setAttribute("step", "1");
+    input.id = "plemionaui_planingatacktime";
+    input.setAttribute("style","font-weight: 700; font-size: 15px;");
+
+    let timenow = new Date;
+    timenow.setMinutes( timenow.getMinutes() + 5 );
+    input.value = ""+doublezero(timenow.getHours())+":"+doublezero(timenow.getMinutes())+":"+doublezero(timenow.getSeconds());
+    form.insertBefore(input, form.children[11]);
+
+    let spanmsg = document.createElement("span");
+    spanmsg.innerText = "Off";
+    spanmsg.setAttribute("style","font-weight: 700; font-size: 15px;");
+    spanmsg.id = "plemionaui_planingatackmsg";
+    form.insertBefore(spanmsg, form.children[12]);
+
+    setInterval(function() {
+        if (document.getElementById('plemionaui_planingatack').checked){
+            let atacktime = document.getElementById('plemionaui_planingatacktime').value.split(":");
+            let timenowtxt = new Date;
+            timenowtxt = ""+doublezero(timenowtxt.getHours())+":"+doublezero(timenowtxt.getMinutes())+":"+doublezero(timenowtxt.getSeconds());
+            timenow = timenowtxt.split(":");
+            if (parseInt(atacktime[0]) <= parseInt(timenow[0])){
+                if (parseInt(atacktime[1]) <= parseInt(timenow[1])){
+                    if (parseInt(atacktime[2]) <= parseInt(timenow[2])){
+                        form.getElementsByClassName('btn')[0].click()
+                    }
+                }
+            }
+            document.getElementById('plemionaui_planingatackmsg').innerText = " Zegar: "+timenowtxt+"";
+        }  
     }, 1000);
 }
 
