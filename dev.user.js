@@ -79,7 +79,7 @@ function core() {
             td.appendChild(img);
             td.appendChild(link);
         tr.appendChild(td);
-    document.getElementById('show_plemionaui_helper').getElementsByTagName('tbody')[0].appendChild(tr);
+        document.getElementById('show_plemionaui_helper').getElementsByTagName('tbody')[0].appendChild(tr);
     }
     function doublezero(x){if (x<10){return "0"+x;}else{return ""+x;}}
     function betterDisplayTime(time){
@@ -93,6 +93,18 @@ function core() {
             input = parseFloat(input)*1000;
         }
         return parseInt(input);
+    }
+    // start ~ wioska początkowa (twoja)  end ~ wioska docelowa
+    function countRoad(startx, starty, endx, endy){
+        let a =  Math.abs(parseInt(startx) - parseInt(endx));
+        let b = Math.abs(parseInt(starty) - parseInt(endy));
+        return Math.round(Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)) *100) / 100;
+    }
+    function unitSpeedCount(distanse, unitspeed){
+        let x = distanse * unitspeed;
+        let h = Math.floor(x / 60);
+        let min = Math.round(x - (h*60));
+        return doublezero(h)+':'+doublezero(min)+':00';
     }
 
 
@@ -276,7 +288,6 @@ if (URLGET['screen'] == 'place' && URLGET['try'] == 'confirm'){
             if (parseInt(atacktime[0]) <= parseInt(timenow[0])){
                 if (parseInt(atacktime[1]) <= parseInt(timenow[1])){
                     if (parseInt(atacktime[2]) <= parseInt(timenow[2])){
-                        console.log('Wyslij atak')
                         form.getElementsByClassName('btn')[0].click()
                     }
                 }
@@ -286,7 +297,42 @@ if (URLGET['screen'] == 'place' && URLGET['try'] == 'confirm'){
     }, 1000);
 }
 
-// Refresh Data Everywhere
+if (URLGET['screen'] == 'info_village'){
+    let delayscript = function(){
+        let targetcord = document.URL.split('#')[1].split(';');
+        let mycord = game_data.village.coord.split('|');
+        let dist = countRoad(mycord[0], mycord[1], targetcord[0], targetcord[1]);
+
+        let table = document.getElementById('content_value').getElementsByClassName('vis')[0];
+        let clone = table.children[0].children[3].cloneNode(true);
+        clone.children[0].innerText = 'Odległość';
+
+        clone.children[1].innerText = dist+" pól";
+        table.appendChild(clone);
+
+        let marker = document.createElement("div");
+        marker.id="plemionaui_speedcountertable";
+        document.getElementById('content_value').appendChild(marker);
+
+        document.getElementById('plemionaui_speedcountertable').innerHTML = '<div style="padding-top: 10px; clear:both"><h3>Prędkość jednostek</h3><table class="vis" width="100%" id="plemionaui_tablespeed"><tbody><tr><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="spear"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_spear.png" title="Pikinier" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="sword"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_sword.png" title="Miecznik" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="axe"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_axe.png" title="Topornik" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="archer"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_archer.png" title="Łucznik" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="spy"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_spy.png" title="Zwiadowca" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="light"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_light.png" title="Lekki kawalerzysta" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="marcher"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_marcher.png" title="Łucznik na koniu" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="heavy"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_heavy.png" title="Ciężki kawalerzysta" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="ram"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_ram.png" title="Taran" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="catapult"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_catapult.png" title="Katapulta" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="knight"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_knight.png" title="Rycerz" alt="" class=""></a></th><th style="text-align:center" width="40"><a href="#" class="unit_link" data-unit="snob"><img src="https://dspl.innogamescdn.com/asset/6be9bf502a/graphic/unit/unit_snob.png" title="Szlachcic" alt="" class=""></a></th></tr><tr><td style="text-align:center; text-decoration: underline;" class="unit-item unit-item-spear">0</td><td style="text-align:center" class="unit-item unit-item-sword">0</td><td style="text-align:center; text-decoration: underline;" class="unit-item unit-item-axe">0</td><td style="text-align:center;text-decoration: underline;" class="unit-item unit-item-archer">0</td><td style="text-align:center" class="unit-item unit-item-spy">0</td><td style="text-align:center; text-decoration: overline;" class="unit-item unit-item-light">0</td><td style="text-align:center;text-decoration: overline;" class="unit-item unit-item-marcher">0</td><td style="text-align:center" class="unit-item unit-item-heavy">0</td><td style="text-align:center" class="unit-item unit-item-ram">0</td><td style="text-align:center" class="unit-item unit-item-catapult">0</td><td style="text-align:center; text-decoration: overline;" class="unit-item unit-item-knight">0</td><td style="text-align:center" class="unit-item unit-item-snob">0</td></tr></tbody></table></div>';
+        
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-spear')[0].innerText = unitSpeedCount(dist, 18);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-sword')[0].innerText = unitSpeedCount(dist, 22);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-axe')[0].innerText = unitSpeedCount(dist, 18);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-archer')[0].innerText = unitSpeedCount(dist, 18);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-spy')[0].innerText = unitSpeedCount(dist, 9);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-light')[0].innerText = unitSpeedCount(dist, 10);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-marcher')[0].innerText = unitSpeedCount(dist, 10);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-heavy')[0].innerText = unitSpeedCount(dist, 11);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-ram')[0].innerText = unitSpeedCount(dist, 30);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-catapult')[0].innerText = unitSpeedCount(dist, 30);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-knight')[0].innerText = unitSpeedCount(dist, 10);
+        document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-snob')[0].innerText = unitSpeedCount(dist, 35);
+    };
+   setTimeout(delayscript, 1000);
+}
+
+// Refresh Pop Everywhere
 setInterval(function() {
     let pop = document.getElementById('pop_current_label').innerHTML;
     let popmax = document.getElementById('pop_max_label').innerHTML;
@@ -305,6 +351,23 @@ setInterval(function() {
     }     
 }, 1000);
 
-};
+// licznik pól do danej wioski
+for (let i = 0; i < document.getElementsByClassName('village_anchor').length; i++) {
+    let cord = document.getElementsByClassName('village_anchor')[i].children[0].innerText.toString().trim().split('(')[1].split(')')[0].split('|');
+    let vcord = game_data.village.coord.split('|');
+    let path = countRoad(vcord[0], vcord[1], cord[0], cord[1]);
+    document.getElementsByClassName('village_anchor')[i].children[0].innerText = document.getElementsByClassName('village_anchor')[i].children[0].innerText + '['+path+']';
+}
+
+
+};// core()
 
 window.onload = core();
+
+
+//
+/*let mNotifyContainer = document.getElementById('mNotifyContainer');
+let darkmode = document.getElementById('notify_report').cloneNode(true);
+darkmode.id='plemionaui_notify_darkmode';
+
+*/
