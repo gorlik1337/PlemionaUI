@@ -133,7 +133,7 @@ if (URLGET['screen'] == 'overview'){
         var cordinate = document.getElementById('mobileMenuSmall').children[0].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
     }*/
     if (document.getElementById('menu_row2') != null){
-        var cordinate = document.getElementById('menu_row2').children[1].children[0].innerHTML.split('(')[1].split(')')[0].split('|');
+        var cordinate = document.getElementById('menu_row2').innerHTML.split('(')[1].split(')')[0].split('|');
     }
     const maplink = 'http://'+worldcode+'.plemionamapa.pl/?x='+cordinate[0]+'&y='+cordinate[1];
     const planerlink = 'http://pl.twstats.com/'+worldcode+'/index.php?page=attack_planner';
