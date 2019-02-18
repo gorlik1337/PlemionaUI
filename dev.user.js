@@ -299,16 +299,33 @@ if (URLGET['screen'] == 'place' && URLGET['try'] == 'confirm'){
 
 if (URLGET['screen'] == 'info_village'){
     let delayscript = function(){
-        let targetcord = document.URL.split('#')[1].split(';');
-        let mycord = game_data.village.coord.split('|');
+
+        if (document.getElementsByClassName('mobileKeyValue')){
+            /* Mobile */
+            var targetcord = document.getElementsByClassName('mobileKeyValue')[0].children[1].innerText.split("\n")[1].split('|');
+        }else{
+            /* Desktop */
+            var targetcord = document.URL.split('#')[1].split(';');
+        }
+
+        var mycord = game_data.village.coord.split('|');
         let dist = countRoad(mycord[0], mycord[1], targetcord[0], targetcord[1]);
 
-        let table = document.getElementById('content_value').getElementsByClassName('vis')[0];
-        let clone = table.children[0].children[3].cloneNode(true);
-        clone.children[0].innerText = 'Odległość';
-
-        clone.children[1].innerText = dist+" pól";
-        table.appendChild(clone);
+        if (document.getElementsByClassName('mobileKeyValue')){
+            /* Mobile */
+            let table = document.getElementById('content_value').getElementsByClassName('mobileKeyValue')[0];
+            let clone = table.children[2].cloneNode(true);
+            clone.children[0].innerText = 'Odległość:';
+            clone.children[1].innerText = dist+" pól";
+            table.appendChild(clone);
+        }else{
+            let table = document.getElementById('content_value').getElementsByClassName('vis')[0];
+            let clone = table.children[0].children[3].cloneNode(true);
+            clone.children[0].innerText = 'Odległość:';
+            clone.children[1].innerText = dist+" pól";
+            table.appendChild(clone);
+        }
+        
 
         let marker = document.createElement("div");
         marker.id="plemionaui_speedcountertable";
