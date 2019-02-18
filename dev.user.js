@@ -297,6 +297,7 @@ if (URLGET['screen'] == 'place' && URLGET['try'] == 'confirm'){
     }, 1000);
 }
 
+/* Inofrmacje o wiosce (podgląd) */
 if (URLGET['screen'] == 'info_village'){
     let delayscript = function(){
 
@@ -327,7 +328,6 @@ if (URLGET['screen'] == 'info_village'){
             table.appendChild(clone);
         }
         
-
         let marker = document.createElement("div");
         marker.id="plemionaui_speedcountertable";
         document.getElementById('content_value').appendChild(marker);
@@ -348,6 +348,45 @@ if (URLGET['screen'] == 'info_village'){
         document.getElementById('plemionaui_tablespeed').getElementsByClassName('unit-item-snob')[0].innerText = unitSpeedCount(dist, 35);
     };
    setTimeout(delayscript, 1000);
+}
+
+/* Giełda Premium - szybka sprzedasz dla farmerów PP */
+if (URLGET['screen'] == 'market' && URLGET['mode'] == 'exchange' ){
+    let delayscript = function(){
+        let market_wood = document.getElementById('premium_exchange_sell_wood').getElementsByClassName('cost-container cost-container-sell')[0];
+        let market_stone = document.getElementById('premium_exchange_sell_stone').getElementsByClassName('cost-container cost-container-sell')[0];
+        let market_iron = document.getElementById('premium_exchange_sell_iron').getElementsByClassName('cost-container cost-container-sell')[0];
+        
+        var kurs_wood = parseInt(document.getElementById('premium_exchange_rate_wood').children[0].innerText);
+        var kurs_stone = parseInt(document.getElementById('premium_exchange_rate_stone').children[0].innerText);
+        var kurs_iron = parseInt(document.getElementById('premium_exchange_rate_iron').children[0].innerText);
+
+        /* STARS */
+        let market_star1 = document.createElement("span");
+        market_star1.className = 'icon header favorite_add star'
+        market_star1.style = 'margin: 0px;';
+        market_star1.onclick = function() {
+            document.getElementsByName('sell_wood')[0].value = (Math.floor(game_data.village.wood / kurs_wood) * kurs_wood);
+        }  
+        market_wood.appendChild(market_star1);
+
+        let market_star2 = document.createElement("span");
+        market_star2.className = 'icon header favorite_add star'
+        market_star2.style = 'margin: 0px;';
+        market_star2.onclick = function() {
+            document.getElementsByName('sell_stone')[0].value = (Math.floor(game_data.village.stone / kurs_stone) * kurs_stone);
+        } 
+        market_stone.appendChild(market_star2);
+
+        let market_star3 = document.createElement("span");
+        market_star3.className = 'icon header favorite_add star'
+        market_star3.style = 'margin: 0px;';
+        market_star3.onclick = function() {
+            document.getElementsByName('sell_iron')[0].value = (Math.floor(game_data.village.iron / kurs_iron) * kurs_iron);
+        } 
+        market_iron.appendChild(market_star3);
+    };
+    setTimeout(delayscript, 1000);
 }
 
 // Refresh Pop Everywhere
