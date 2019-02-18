@@ -300,18 +300,19 @@ if (URLGET['screen'] == 'place' && URLGET['try'] == 'confirm'){
 if (URLGET['screen'] == 'info_village'){
     let delayscript = function(){
 
-        if (document.getElementsByClassName('mobileKeyValue')){
+        if (document.getElementsByClassName('mobileKeyValue')[0] != null){
             /* Mobile */
             var targetcord = document.getElementsByClassName('mobileKeyValue')[0].children[1].innerText.split("\n")[1].split('|');
         }else{
             /* Desktop */
+            //var targetcord =  table.children[0].children[2].children[1].innerText.split('|');
             var targetcord = document.URL.split('#')[1].split(';');
         }
 
         var mycord = game_data.village.coord.split('|');
         let dist = countRoad(mycord[0], mycord[1], targetcord[0], targetcord[1]);
 
-        if (document.getElementsByClassName('mobileKeyValue')){
+        if (document.getElementsByClassName('mobileKeyValue')[0] != null){
             /* Mobile */
             let table = document.getElementById('content_value').getElementsByClassName('mobileKeyValue')[0];
             let clone = table.children[2].cloneNode(true);
