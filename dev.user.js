@@ -147,6 +147,7 @@ if (URLGET['screen'] == 'overview'){
     addHelperLineURL("plemionamapa.pl", maplink, "https://dspl.innogamescdn.com/asset/76fbc2898/graphic/icons/map2.png");
     addHelperLineURL("Planer Ataków", planerlink, "https://help.plemiona.pl/images/e/ea/Predkosc.png");
     addHelperScript("Stan Wojska", "https://media.innogamescdn.com/com_DS_PL/skrypty/licznik_wojska.js", "https://help.plemiona.pl/images/2/21/Koszary_16x16.png");
+    addHelperScript("Wspracie", "https://gorlik1337.github.io/PlemionaUI/licznik_wsparcia.js", "https://dspl.innogamescdn.com/asset/4cfd523b/graphic/command/support.png");
 }
 
 /* Raporty */
