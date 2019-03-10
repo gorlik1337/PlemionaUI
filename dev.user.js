@@ -367,7 +367,7 @@ if (URLGET['screen'] == 'market' && URLGET['mode'] == 'exchange' ){
         market_star1.className = 'icon header favorite_add star'
         market_star1.style = 'margin: 0px;';
         market_star1.onclick = function() {
-            document.getElementsByName('sell_wood')[0].value = (Math.floor(game_data.village.wood / kurs_wood) * kurs_wood);
+            document.getElementsByName('sell_wood')[0].value = (Math.floor(game_data.village.wood / kurs_wood) * kurs_wood - (0.5*kurs_wood));
         }  
         market_wood.appendChild(market_star1);
 
@@ -375,7 +375,7 @@ if (URLGET['screen'] == 'market' && URLGET['mode'] == 'exchange' ){
         market_star2.className = 'icon header favorite_add star'
         market_star2.style = 'margin: 0px;';
         market_star2.onclick = function() {
-            document.getElementsByName('sell_stone')[0].value = (Math.floor(game_data.village.stone / kurs_stone) * kurs_stone);
+            document.getElementsByName('sell_stone')[0].value = (Math.floor(game_data.village.stone / kurs_stone) * kurs_stone - (0.5*kurs_stone));
         } 
         market_stone.appendChild(market_star2);
 
@@ -383,7 +383,7 @@ if (URLGET['screen'] == 'market' && URLGET['mode'] == 'exchange' ){
         market_star3.className = 'icon header favorite_add star'
         market_star3.style = 'margin: 0px;';
         market_star3.onclick = function() {
-            document.getElementsByName('sell_iron')[0].value = (Math.floor(game_data.village.iron / kurs_iron) * kurs_iron);
+            document.getElementsByName('sell_iron')[0].value = (Math.floor(game_data.village.iron / kurs_iron) * kurs_iron - (0.5*kurs_iron));
         } 
         market_iron.appendChild(market_star3);
     };
