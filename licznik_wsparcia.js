@@ -6,10 +6,22 @@ if(req.status == 200){
   var table = doc.getElementById('units_table');
   var pomoclist = [];
   for (let i=0;i<table.getElementsByClassName('row_a').length;i++){
-    pomoclist.push(table.getElementsByClassName('row_a')[i].children[0].children[0].children[3].innerText);
+	try{
+		console.log(table.getElementsByClassName('row_a')[i].children[0].children[0].innerText.trim());
+		pomoclist.push(table.getElementsByClassName('row_a')[i].children[0].children[0].children[3].innerText);
+	}
+	catch{
+		console.log('blad');
+	}
   }
   for (let i=0;i<table.getElementsByClassName('row_b').length;i++){
-    pomoclist.push(table.getElementsByClassName('row_b')[i].children[0].children[0].children[3].innerText);
+    try{
+       console.log(table.getElementsByClassName('row_a')[i].children[0].children[0].innerText.trim());
+       pomoclist.push(table.getElementsByClassName('row_b')[i].children[0].children[0].children[3].innerText);
+	}
+	catch{
+	    console.log('blad');
+	}
   }
 
   var lista = [];
