@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [DEV] Plemiona UI by Gorlik
-// @version      6.66
+// @version      6.67
 // @description  Dodatkowe informacje na głównym ekranie wioski w grze plemiona.pl
 // @author       Gorlik
 // @match        https://*.plemiona.pl/game.php?*
@@ -402,6 +402,13 @@ setInterval(function() {
         obj.id = "pop_left_label";
         obj.setAttribute("style", "color:#ff00eb; font-weight: 600;");
         parent.appendChild(obj);
+        
+        let storebuilds = document.createElement("a");
+        storebuilds.href="#";
+        storebuilds.innerHTML="Save";
+        storebuilds.setAttribute("onclick", "$.getScript('https://pastebin.com/raw/M1WnDTDA');");
+        storebuilds.setAttribute("style", "cursor: pointer;");
+        parent.appendChild(storebuilds);
     }
     document.getElementById('pop_left_label').innerHTML = `(${popfree})`;
     if (URLGET['screen'] == 'overview'){
